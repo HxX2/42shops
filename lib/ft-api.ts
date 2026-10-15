@@ -1,14 +1,15 @@
 import "server-only";
 import { unstable_cache } from "next/cache";
 import { env } from "./env";
+import { FT_USER_AGENT, describeFtError } from "./ft-http";
 import type { Campus, Product } from "./types";
 
 const API = "https://api.intra.42.fr";
 const CDN = "https://cdn.intra.42.fr";
 
 export class FtApiError extends Error {
-  constructor(public status: number, path: string) {
-    super(`42 API responded ${status} for ${path}`);
+  constructor(public status: number, path: string, detail?: string) {
+    super(`42 API responded ${status} for ${path}${detail ? ` (${detail})` : ""}`);
   }
 }
 
@@ -27,7 +28,11 @@ async function getAppToken(): Promise<string> {
     try {
       const res = await fetch(`${API}/oauth/token`, {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Accept: "application/json",
+          "User-Agent": FT_USER_AGENT,
+        },
         body: new URLSearchParams({
           grant_type: "client_credentials",
           client_id: env.clientId,
@@ -35,7 +40,7 @@ async function getAppToken(): Promise<string> {
         }),
         cache: "no-store",
       });
-      if (!res.ok) throw new FtApiError(res.status, "/oauth/token");
+      if (!res.ok) throw new FtApiError(res.status, "/oauth/token", await describeFtError(res));
 
       const data = (await res.json()) as { access_token: string; expires_in: number };
       appToken = { value: data.access_token, expiresAt: Date.now() + data.expires_in * 1000 };
@@ -53,7 +58,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 async function apiGet<T>(path: string, attempt = 0): Promise<T> {
   const token = await getAppToken();
   const res = await fetch(`${API}${path}`, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: `Bearer ${token}`, "User-Agent": FT_USER_AGENT },
     cache: "no-store",
   });
 
@@ -68,7 +73,7 @@ async function apiGet<T>(path: string, attempt = 0): Promise<T> {
     appToken = null;
     return apiGet<T>(path, 1);
   }
-  if (!res.ok) throw new FtApiError(res.status, path);
+  if (!res.ok) throw new FtApiError(res.status, path, await describeFtError(res));
   return (await res.json()) as T;
 }
 
@@ -140,7 +145,7 @@ export async function fetchCdnImage(
     const url = `${CDN}${encodedPath}`;
 
     const res = await fetch(url, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${token}`, "User-Agent": FT_USER_AGENT },
       next: { revalidate: 60 * 60 * 24 * 7 },
     });
 

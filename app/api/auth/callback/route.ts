@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { timingSafeEqual } from "node:crypto";
 import { env } from "@/lib/env";
+import { FT_USER_AGENT, describeFtError } from "@/lib/ft-http";
 import {
   SESSION_COOKIE,
   SESSION_MAX_AGE,
@@ -53,7 +54,11 @@ export async function GET(request: NextRequest) {
   try {
     const tokenRes = await fetch("https://api.intra.42.fr/oauth/token", {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+        "User-Agent": FT_USER_AGENT,
+      },
       body: new URLSearchParams({
         grant_type: "authorization_code",
         client_id: env.clientId,
@@ -64,14 +69,14 @@ export async function GET(request: NextRequest) {
       }),
       cache: "no-store",
     });
-    if (!tokenRes.ok) throw new Error(`token exchange failed (${tokenRes.status})`);
+    if (!tokenRes.ok) throw new Error(`token exchange failed: ${await describeFtError(tokenRes)}`);
     const { access_token } = (await tokenRes.json()) as { access_token: string };
 
     const meRes = await fetch("https://api.intra.42.fr/v2/me", {
-      headers: { Authorization: `Bearer ${access_token}` },
+      headers: { Authorization: `Bearer ${access_token}`, "User-Agent": FT_USER_AGENT },
       cache: "no-store",
     });
-    if (!meRes.ok) throw new Error(`/v2/me failed (${meRes.status})`);
+    if (!meRes.ok) throw new Error(`/v2/me failed: ${await describeFtError(meRes)}`);
     const me = (await meRes.json()) as Me;
 
     // The user's 42 token is used once here and discarded; only this profile is kept.
