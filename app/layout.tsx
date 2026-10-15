@@ -9,7 +9,7 @@ import "./globals.css";
 import { Providers } from "@/components/providers";
 
 export const metadata: Metadata = {
-  title: { default: "Campus Shops", template: "%s — Campus Shops" },
+  title: { default: "Campus Shops", template: "%s - Campus Shops" },
   description: "Browse the intra shop of every 42 campus, grouped by country.",
   robots: { index: false, follow: false },
 };
