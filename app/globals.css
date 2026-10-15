@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
+  --font-pixel: "Silkscreen", ui-monospace, "Courier New", monospace;
+  --font-hand: "Kalam", "Comic Sans MS", "Bradley Hand", cursive;
+
+  --color-canvas: #e9e9ec;
+  --color-paper: #ffffff;
+  --color-ink: #000000;
+  --color-muted: #6e6e76;
+  --color-line: #e4e4e8;
+  --color-wash: #f4f4f6;
+  --color-blue: #2f6bff;
+  --color-blue-deep: #1e4fd8;
+  --color-blue-wash: #eaf0ff;
+  --color-sticky: #f5d33f;
+  --color-coin: #ffc53d;
+  --color-heart: #ff3b5c;
+  --color-go: #12a35c;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-shimmer: shimmer 1.8s linear infinite;
+
+  @keyframes marquee {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+  @keyframes shimmer {
+    from { background-position: 150% 0; }
+    to { background-position: -150% 0; }
+  }
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-canvas font-sans text-ink;
+  }
+  ::selection {
+    background: var(--color-blue);
+    color: white;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  button {
+    cursor: pointer;
+  }
+}
+
+@utility sheet {
+  background: var(--color-paper);
+  border-radius: 28px;
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.04),
+    0 2px 2px rgb(0 0 0 / 0.02),
+    0 24px 48px -24px rgb(0 0 0 / 0.16);
+}
+
+/* Grid paper behind hero areas; reads like a design canvas. */
+@utility canvas-grid {
+  background-image:
+    linear-gradient(to right, rgb(0 0 0 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(0 0 0 / 0.045) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+@utility skeleton {
+  background: linear-gradient(90deg, #efeff2 25%, #f8f8fa 50%, #efeff2 75%);
+  background-size: 300% 100%;
+  animation: var(--animate-shimmer);
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
