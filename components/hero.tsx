@@ -11,6 +11,7 @@ import { PixelArt } from "./pixel-art";
 import { CornerHandles } from "./selection-frame";
 import { Sticker } from "./sticker";
 import { StickyNote } from "./sticky-note";
+import { Magnetic } from "./magnetic";
 
 type Notice = { tone: "info" | "error"; text: string } | null;
 
@@ -49,29 +50,6 @@ function Letters({ text }: { text: string }) {
   );
 }
 
-function Magnetic({ children }: { children: React.ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const x = useSpring(useMotionValue(0), { stiffness: 220, damping: 16 });
-  const y = useSpring(useMotionValue(0), { stiffness: 220, damping: 16 });
-  return (
-    <motion.div
-      ref={ref}
-      style={{ x, y }}
-      onPointerMove={(e) => {
-        if (e.pointerType !== "mouse" || !ref.current) return;
-        const r = ref.current.getBoundingClientRect();
-        x.set((e.clientX - (r.left + r.width / 2)) * 0.25);
-        y.set((e.clientY - (r.top + r.height / 2)) * 0.35);
-      }}
-      onPointerLeave={() => {
-        x.set(0);
-        y.set(0);
-      }}
-    >
-      {children}
-    </motion.div>
-  );
-}
 
 export function Hero({
   user,

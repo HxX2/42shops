@@ -8,6 +8,7 @@ import { Gear } from "./gear";
 import { PixelArt } from "./pixel-art";
 import { CornerHandles } from "./selection-frame";
 import { Sticker } from "./sticker";
+import { Magnetic } from "./magnetic";
 
 export function NotFoundView() {
   const stage = useRef<HTMLDivElement>(null);
@@ -37,16 +38,20 @@ export function NotFoundView() {
         </motion.span>
       </h1>
       <p className="mt-2 text-sm text-muted">This page doesn&apos;t exist, or the campus ID is wrong.</p>
-      <motion.div whileTap={{ scale: 0.96 }} className="mt-8">
-        <Link
-          href="/shops"
-          className="group relative inline-flex items-center gap-2 border border-line bg-white px-5 py-3 font-hand text-lg transition-colors hover:border-blue hover:text-blue"
-        >
-          <CornerHandles className="text-[#bdbdc4] group-hover:text-blue" />
-          Back to the campuses
-          <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-        </Link>
-      </motion.div>
+      <div className="mt-8">
+        <Magnetic>
+          <motion.div whileTap={{ scale: 0.96 }}>
+            <Link
+              href="/shops"
+              className="group relative inline-flex items-center gap-3 border border-line bg-white px-6 py-3.5 font-hand text-lg text-ink transition-colors duration-200 hover:border-blue hover:text-blue"
+            >
+              <CornerHandles className="text-[#bdbdc4] group-hover:text-blue" />
+              Back to the campuses
+              <ArrowRight size={18} className="transition-transform duration-300 ease-out-expo group-hover:translate-x-1" />
+            </Link>
+          </motion.div>
+        </Magnetic>
+      </div>
     </main>
   );
 }
