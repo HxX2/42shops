@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { after } from "next/server";
 import { ShopView } from "@/components/shop-view";
 import { getCampusProducts, getCampuses, getWallet } from "@/lib/ft-api";
 import { requireSession } from "@/lib/session";
@@ -34,8 +35,9 @@ export default async function CampusShopPage({ params }: Props) {
   const campus = campuses.find((c) => c.id === id);
   if (!campus) notFound();
 
-  // Record qualified view asynchronously without blocking the shop response
-  void recordCampusView(id, session.id);
+  // Record the view after the response is sent. Unlike a bare `void` promise,
+  // after() keeps the serverless function alive until the write finishes.
+  after(() => recordCampusView(id, session.id));
 
   const [products, wallet] = await Promise.all([getCampusProducts(id), getWallet(session.id, session.wallet)]);
 
