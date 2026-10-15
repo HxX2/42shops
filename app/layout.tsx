@@ -6,6 +6,7 @@ import "@fontsource/silkscreen/400.css";
 import "@fontsource/kalam/400.css";
 import "@fontsource/kalam/700.css";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 import { Providers } from "@/components/providers";
 
 export const metadata: Metadata = {
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="min-h-dvh p-2 sm:p-4">
         <Providers>{children}</Providers>
+        <Analytics />
       </body>
     </html>
   );

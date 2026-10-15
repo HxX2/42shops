@@ -55,6 +55,7 @@ Each 42 campus runs its own intra shop, and you can normally only see your own. 
 | Animation | [Motion](https://motion.dev) (`motion/react`) |
 | Auth | 42 OAuth 2.0, signed JWT session cookie via [jose](https://github.com/panva/jose) |
 | Storage | [Upstash Redis](https://upstash.com) for campus view counts |
+| Analytics | [Vercel Web Analytics](https://vercel.com/docs/analytics) (page views, no cookies) |
 | Fonts | Instrument Serif, Geist, Silkscreen, Kalam (self-hosted via Fontsource) |
 | Data | [42 API v2](https://api.intra.42.fr/apidoc) |
 
