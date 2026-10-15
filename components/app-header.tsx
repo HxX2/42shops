@@ -2,13 +2,44 @@
 
 import { useCallback, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { ChevronDown, ExternalLink, LogOut } from "lucide-react";
+import { ChevronDown, ExternalLink, LogOut, Star } from "lucide-react";
 import { AnimatedNumber } from "./animated-number";
 import { Brand } from "./brand";
+import { GithubIcon } from "./github-icon";
 import { PixelArt } from "./pixel-art";
 import { useDismiss } from "./use-dismiss";
 
 type User = { login: string; displayName: string; image: string | null };
+
+function GitHubBadge({ stars = 0 }: { stars?: number }) {
+  return (
+    <motion.a
+      href="https://github.com/HxX2/42shops"
+      target="_blank"
+      rel="noopener noreferrer"
+      initial="rest"
+      whileHover="hover"
+      whileTap={{ scale: 0.96 }}
+      className="group flex items-center gap-1.5 rounded-full border border-line bg-white py-1.5 pl-2.5 pr-3 text-xs font-medium text-ink transition-colors hover:border-ink hover:bg-wash"
+      title="Star 42shops on GitHub"
+    >
+      <motion.span
+        variants={{ rest: { rotate: 0 }, hover: { rotate: 18, scale: 1.12 } }}
+        transition={{ type: "spring", stiffness: 450, damping: 20 }}
+        className="flex text-ink"
+      >
+        <GithubIcon size={14} />
+      </motion.span>
+      <span className="hidden sm:inline font-medium text-muted transition-colors group-hover:text-ink">
+        Star
+      </span>
+      <span className="flex items-center gap-1 rounded-full bg-wash px-1.5 py-0.5 font-mono text-[11px] font-semibold text-ink group-hover:bg-white group-hover:shadow-2xs">
+        <Star size={11} className="fill-coin text-coin" />
+        <span className="tabular">{stars}</span>
+      </span>
+    </motion.a>
+  );
+}
 
 function WalletPill({ wallet }: { wallet: number }) {
   return (
@@ -122,11 +153,12 @@ function UserMenu({ user }: { user: User }) {
   );
 }
 
-export function AppHeader({ user, wallet }: { user: User; wallet: number }) {
+export function AppHeader({ user, wallet, stars = 0 }: { user: User; wallet: number; stars?: number }) {
   return (
     <header className="relative z-40 flex items-center justify-between gap-4 px-5 py-5 sm:px-10 sm:py-6">
       <Brand href="/shops" />
       <div className="flex items-center gap-2">
+        <GitHubBadge stars={stars} />
         <WalletPill wallet={wallet} />
         <UserMenu user={user} />
       </div>

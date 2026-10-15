@@ -7,7 +7,7 @@ import { ArrowUpRight } from "lucide-react";
 const AUTHOR = {
   name: "HxX",
   subtitle: "1337 Morocco",
-  avatarUrl: "https://github.com/HxX2.png",
+  avatarUrl: "/author-avatar.png",
   htmlUrl: "https://github.com/HxX2",
 };
 

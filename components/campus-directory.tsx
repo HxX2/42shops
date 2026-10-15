@@ -6,6 +6,7 @@ import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { ArrowUpRight, Loader2, Search, Users, X } from "lucide-react";
 import type { Campus, CountryGroup } from "@/lib/types";
 import { campusCity, cn, formatNumber, normalize } from "@/lib/utils";
+import { GithubIcon } from "./github-icon";
 import { PixelArt } from "./pixel-art";
 import { SelectionFrame } from "./selection-frame";
 import { StickyNote } from "./sticky-note";
@@ -265,9 +266,24 @@ export function CampusDirectory({
             its shop sells, what&apos;s in stock, and what your wallet covers.
           </p>
         </div>
-        <StickyNote className="hidden w-60 justify-self-end lg:block" rotate={-3} delay={0.25} pin={<PixelArt sprite="pinkHeart" scale={3} />}>
-          Press <kbd className="rounded border border-black/20 bg-white/50 px-1 font-sans text-sm">/</kbd> to search. Country names work too, like &ldquo;Morocco&rdquo;.
-        </StickyNote>
+        <div className="hidden flex-wrap items-end justify-end gap-5 lg:flex">
+          <StickyNote className="w-56" rotate={-3} delay={0.25} pin={<PixelArt sprite="pinkHeart" scale={3} />}>
+            Press <kbd className="rounded border border-black/20 bg-white/50 px-1 font-sans text-sm">/</kbd> to search. Country names work too, like &ldquo;Morocco&rdquo;.
+          </StickyNote>
+          <StickyNote className="w-60 translate-y-3" rotate={2.5} delay={0.35} pin={<PixelArt sprite="star" scale={3} />}>
+            <p>Feel free to checkout the repo and leave a star!</p>
+            <a
+              href="https://github.com/HxX2/42shops"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-black/35 bg-transparent px-3 py-1 font-sans text-xs font-medium text-ink transition-all hover:border-black hover:bg-black/5 active:scale-95"
+            >
+              <GithubIcon size={13} />
+              <span>Star on GitHub</span>
+              <ArrowUpRight size={13} />
+            </a>
+          </StickyNote>
+        </div>
       </section>
 
       {home || mostViewed ? (
